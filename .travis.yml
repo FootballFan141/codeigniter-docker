@@ -17,8 +17,7 @@ env:
 
 before_install:
   - sudo apt-get -y update
-  - sudo apt-get -y purge docker-engine
-  - sudo apt-get -y install docker-engine
+  - sudo apt-get -y install docker-ce
 
 install:
   - sudo rm /usr/local/bin/docker-compose
