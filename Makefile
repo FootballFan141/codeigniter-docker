@@ -1,19 +1,19 @@
 .PHONY: build up down
 
 build:
-	docker-compose -p ci build
+	docker-compose -p ${PROJECT_NAME} build
 
 up:
-	docker-compose -p ci up -d
+	docker-compose -p ${PROJECT_NAME} up -d
 
 stop:
-	docker-compose -p ci stop
+	docker-compose -p ${PROJECT_NAME} stop
 
 ps:
-	docker-compose -p ci ps
+	docker-compose -p ${PROJECT_NAME} ps
 
 down:
-	docker-compose -p ci down
+	docker-compose -p ${PROJECT_NAME} down
 
 test:
-	sh testing.sh ci
+	sh testing.sh ${PROJECT_NAME}

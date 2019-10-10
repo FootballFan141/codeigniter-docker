@@ -1,3 +1,7 @@
 logs
 ci
 *.bak
+www
+apache/ssl/apache.key
+apache/ssl/apache.crt
+apache/ssl/dhparam.pem

@@ -1,12 +1,12 @@
 FROM phusion/baseimage:latest
 
-MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
+LABEL maintainer="Travis Jones <travisj@appsbytravis.com>"
 
 RUN DEBIAN_FRONTEND=noninteractive
 RUN locale-gen en_US.UTF-8
 
 ENV LANGUAGE=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+ENV LC_ALL=C.UTF-8
 ENV LC_CTYPE=UTF-8
 ENV LANG=en_US.UTF-8
 ENV TERM xterm
@@ -21,21 +21,20 @@ RUN add-apt-repository -y \
 
 # Install PHP-CLI 7, some PHP extentions and some useful Tools with APT
 RUN apt-get update && apt-get install -y --force-yes \
-  php7.0-cli \
-  php7.0-common \
-  php7.0-curl \
-  php7.0-json \
-  php7.0-xml \
-  php7.0-mbstring \
-  php7.0-mcrypt \
-  php7.0-mysql \
-  php7.0-pgsql \
-  php7.0-sqlite \
-  php7.0-sqlite3 \
-  php7.0-zip \
-  php7.0-memcached \
-  php7.0-gd \
-  php7.0-xdebug \
+  php-cli \
+  php-common \
+  php-curl \
+  php-json \
+  php-xml \
+  php-mbstring \
+  php-mcrypt \
+  php-mysql \
+  php-pgsql \
+  php-sqlite3 \
+  php-zip \
+  php-memcached \
+  php-gd \
+  php-xdebug \
   php-dev \
   libcurl4-openssl-dev \
   libedit-dev \
@@ -47,27 +46,25 @@ RUN apt-get update && apt-get install -y --force-yes \
   git \
   curl \
   vim \
-  nano
+  nano \
+  unzip \
+  zip
 
 # Install nvm (Node Version Manager)
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 
 # remove load xdebug extension
-RUN sed -i 's/^/;/g' /etc/php/7.0/cli/conf.d/20-xdebug.ini
+RUN sed -i 's/^/;/g' /etc/php/7.3/cli/conf.d/20-xdebug.ini
 
 # Add bin folder of composer to PATH.
-RUN echo "export PATH=${PATH}:/var/www/codeigniter/vendor/bin" >> ~/.bashrc
+RUN echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc
 
 # Install Composer
 RUN curl -s http://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer
 
 # Load xdebug Zend extension with phpunit command
-RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/codeigniter/vendor/bin/phpunit'" >> ~/.bashrc
-
-# Install mongodb extension
-RUN pecl install mongodb
-RUN echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
+RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/vendor/bin/phpunit'" >> ~/.bashrc
 
 ENV NVM_DIR=/root/.nvm
 
@@ -76,12 +73,12 @@ RUN . ~/.nvm/nvm.sh && \
   nvm install stable && \
   nvm use stable && \
   nvm alias stable && \
-  npm install -g gulp bower
+  npm install -g gulp yarn
 
 # Source the bash
-RUN . ~/.bashrc
+RUN /bin/bash -c ". ~/.bashrc"
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /var/www/codeigniter
+WORKDIR /var/www

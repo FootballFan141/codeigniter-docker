@@ -1,6 +1,6 @@
 FROM mysql:latest
 
-MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
+LABEL maintainer="Travis Jones <travisj@appsbytravis.com>"
 
 CMD ["mysqld"]
 

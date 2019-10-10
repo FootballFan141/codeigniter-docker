@@ -1,7 +1,7 @@
 FROM debian:jessie
 
-MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
+LABEL maintainer="Travis Jones <travisj@appsbytravis.com>"
 
-WORKDIR /var/www/codeigniter
+WORKDIR /var/www
 
 CMD ["true"]

@@ -5,7 +5,7 @@ services:
   php:
     build:
       context: ./php
-      dockerfile: Dockerfile-70
+      dockerfile: Dockerfile-73
     volumes_from:
       - application
     expose:
@@ -16,26 +16,38 @@ services:
   application:
     build: ./application
     volumes:
-      - ../:/var/www/codeigniter
-
+      - ./ci:/var/www      
   data:
     build: ./data
     volumes:
       - /var/lib/mysql
-      - /var/lib/mariadb
+      # - /var/lib/mariadb
       - /data
 
-  nginx:
-    build: ./nginx
+  apache:
+    build: ./apache
     volumes_from:
       - application
     volumes:
-      - ./logs/nginx/:/var/log/nginx
+      - ./logs/apache/:/var/log/apache2
+      - ./apache/ssl/:/usr/local/apache2/conf/ssl
     ports:
-      - "80:80"
-      - "443:443"
+    - "8080:80"
+    - "443:443"
     links:
-      - php
+     - php
+
+  # nginx:
+  #   build: ./nginx
+  #   volumes_from:
+  #     - application
+  #   volumes:
+  #     - ./logs/nginx/:/var/log/nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   links:
+  #     - php
 
   mysql:
     build: ./mysql
@@ -61,12 +73,12 @@ services:
   #     MYSQL_PASSWORD: secret
   #     MYSQL_ROOT_PASSWORD: root
 
-  redis:
-    build: ./redis
-    volumes_from:
-      - data
-    ports:
-      - "6378:6379"
+  # redis:
+  #   build: ./redis
+  #   volumes_from:
+  #     - data
+  #   ports:
+  #     - "6378:6379"
 
   workspace:
     build: ./workspace
